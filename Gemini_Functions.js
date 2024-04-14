@@ -1,3 +1,28 @@
+
+// appsscript.json
+
+{
+  "timeZone": "Europe/Dublin",
+  "dependencies": {
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/spreadsheets.currentonly",
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/cloud-platform"
+  ],
+  "runtimeVersion": "V8"
+}
+
+
+
+
+
+
+// code.js
+
+
+
 project = 'REPLACE WITH PROJECT ID';
 
 function auth() {
