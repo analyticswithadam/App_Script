@@ -106,12 +106,18 @@ var lines = answer.split('\n');
           .setFontWeight('bold')
           .setFontSize(16)
           .setBackground('#efefef');
-     } else if (text.startsWith('* **')) {
-      text = text.replace('* **', '');
-     } else if (text.startsWith('**')) {
+     } 
+      else if (text.startsWith('* ')) {
+      // Handle H2 titles
+      text = text.replace('* ', '');
+      text = text.replace('**', '');
+      text = text.replace('**', '');
+      cell.setValue(text)
+    }
+     else if (text.startsWith('**')) {
       // Handle H2 titles
       text = text.replace('**', '');
-      text = text.replace(':**', '');
+      text = text.replace('**', '');
       cell.setValue(text)
           .setFontWeight('bold')
           .setFontSize(12)
@@ -141,6 +147,7 @@ var lines = answer.split('\n');
       richTextBuilder.setText(text);
       
       cell.setRichTextValue(richTextBuilder.build());
+
     }
     
     cell.setWrap(true);
