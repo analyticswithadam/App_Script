@@ -1,3 +1,6 @@
+
+// Code.js
+
 project = 'ADD Google Cloud PROJECT NAME HERE';
 
 function auth() {
@@ -184,4 +187,28 @@ function generateReport() {
   auth();
   fetchBigQueryData();
   formatReport();
+}
+
+
+// appscript.json
+
+{
+  "timeZone": "Europe/Dublin",
+  "dependencies": {
+    "enabledAdvancedServices": [
+      {
+        "userSymbol": "BigQuery",
+        "serviceId": "bigquery",
+        "version": "v2"
+      }
+    ]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/spreadsheets.currentonly",
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/cloud-platform",
+    "https://www.googleapis.com/auth/documents"
+  ],
+  "runtimeVersion": "V8"
 }
