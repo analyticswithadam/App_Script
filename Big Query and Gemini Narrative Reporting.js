@@ -10,7 +10,7 @@ function auth() {
 }
 
 function fetchBigQueryData() {
-  var projectId = 'superdataworld';
+  var projectId = project;
   var query = 'SELECT category,SUM(CASE WHEN Year_Created = 2021 THEN count ELSE 0 END) AS Count_2021, SUM(CASE WHEN Year_Created = 2022 THEN count ELSE 0 END) AS Count_2022,SUM(CASE WHEN Year_Created = 2023 THEN count ELSE 0 END) AS Count_2023,FROM(SELECT category,SOURCE,EXTRACT(YEAR FROM created_date) AS Year_Created,COUNT(unique_key) AS count FROM `bigquery-public-data.san_francisco_311.311_service_requests`WHERE EXTRACT(YEAR FROM created_date) IN (2021, 2022, 2023) GROUP BY ALL) GROUP BY ALL ORDER BY category; '
  
   var request = {
