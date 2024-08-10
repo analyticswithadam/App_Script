@@ -1,4 +1,4 @@
-project = 'bigquerycourse-onetwothree';
+project = 'ENTER GOOGLE CLOUD PROJECT ID HERE';
 
 function auth() {
   cache = CacheService.getUserCache();
