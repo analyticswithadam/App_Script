@@ -1,3 +1,5 @@
+//"oauthScopes": ["https://www.googleapis.com/auth/spreadsheets.currentonly", "https://www.googleapis.com/auth/script.external_request", "https://www.googleapis.com/auth/cloud-platform", "https://www.googleapis.com/auth/documents"]
+
 function getYouTubeComments() {
   const apiKey = 'ENTER YOUTUBE API KEY'; // Replace with your API key
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
