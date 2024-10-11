@@ -1,0 +1,81 @@
+function sendApprovalRequests() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+
+  for (var i = 1; i < data.length; i++) {
+    var row = data[i];
+    var status = row[4]; // Status column (E)
+
+    if (status === "Pending") {
+      var requestId = row[0];
+      var requester = row[1];
+      var item = row[2];
+      var amount = row[3];
+      var approverEmail = row[5];
+      var pdfLink = row[7]; // PDF Link column (H)
+
+      var subject = "Approval Request ID: " + requestId + " - " + new Date().getTime();
+
+      var message = "Hello,\n\nYou have a new approval request from " + requester + ":\n\n" +
+                    "Item: " + item + "\n" +
+                    "Amount: " + amount + "\n\n";
+
+      if (pdfLink) {
+        message += "Please review the following document for more details:\n" + pdfLink + "\n\n";
+      }
+
+      message += "Please reply with 'Approved' or 'Rejected' in the first line of your response.\n\n" +
+                 "Thank you.";
+
+      MailApp.sendEmail({
+        to: approverEmail,
+        subject: subject,
+        body: message
+      });
+
+      // Update status to 'Sent'
+      sheet.getRange(i+1, 5).setValue("Sent");
+      // Store the unique subject to track the thread later in column G (index 7)
+      sheet.getRange(i+1, 7).setValue(subject);
+    }
+  }
+}
+
+
+
+function checkForApprovals() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+
+  for (var i = 1; i < data.length; i++) {
+    var row = data[i];
+    var status = row[4]; // Status column (E)
+    var approverEmail = row[5];
+    var subjectStored = row[6]; // Email Subject column (G)
+
+    if (status === "Sent" && subjectStored) {
+      var threads = GmailApp.search('subject:"' + subjectStored + '"');
+      if (threads.length > 0) {
+        var thread = threads[0];
+        var messages = thread.getMessages();
+        for (var k = 1; k < messages.length; k++) { // Start from k=1 to skip the sent message
+          var message = messages[k];
+          var sender = message.getFrom();
+          if (sender.includes(approverEmail)) {
+            var body = message.getPlainBody().trim();
+            var firstLine = body.split('\n')[0].trim().toLowerCase();
+
+            if (firstLine === "approved" || firstLine === "rejected") {
+              // Update the status in the sheet
+              sheet.getRange(i+1, 5).setValue(firstLine.charAt(0).toUpperCase() + firstLine.slice(1));
+              // Optionally, mark the thread as completed
+              thread.markRead();
+              thread.moveToArchive();
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+}
