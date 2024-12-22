@@ -5,11 +5,12 @@ function onOpen() {
       .addSubMenu(SpreadsheetApp.getUi().createMenu('Apply Style')
           .addItem('Company Style', 'applyCompanyStyle')
           .addItem('McDonalds Style', 'applyMcDonaldsStyle')
-          .addItem('Coca-Cola Style', 'applyCocaColaStyle'))
+          .addItem('Coca-Cola Style', 'applyCocaColaStyle')
+          .addItem('Remove Formatting', 'removeFormatting'))
       .addToUi();
 }  
   
-   function applyCompanyStyle() {
+  function applyCompanyStyle() {
   // Get the active spreadsheet and sheet
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   const sheet = spreadsheet.getActiveSheet();
@@ -26,7 +27,7 @@ function onOpen() {
   headerRange.setFontWeight('bold');
   headerRange.setFontFamily('Roboto');
   headerRange.setFontColor('#333333'); // Dark gray text
-  headerRange.setHorizontalAlignment('center');
+  headerRange.setHorizontalAlignment('left');
 
   // Define the data range (excluding headers)
   const dataRange = sheet.getRange(2, 1, lastRow - 1, lastColumn);
@@ -34,11 +35,12 @@ function onOpen() {
   // Apply data formatting
   dataRange.setFontFamily('Roboto');
   dataRange.setFontColor('#555555'); // Medium gray text
+  dataRange.setBackground('white');
 
   // Example of formatting a specific column (e.g., Sales column)
-  const salesColumnIndex = 3; // Assuming "Sales" is the 3rd column
+  const salesColumnIndex = 5; // Assuming "Sales" is the 3rd column
   const salesColumnRange = sheet.getRange(2, salesColumnIndex, lastRow - 1, 1);
-  salesColumnRange.setNumberFormat('$#,##0.00'); // Currency format
+  salesColumnRange.setNumberFormat('$#,##0.0'); // Currency format
 
   // Auto-resize columns for better readability
   sheet.autoResizeColumns(1, lastColumn);
@@ -46,7 +48,7 @@ function onOpen() {
   Logger.log('Google style formatting applied!');
 }
 
-      function applyMcDonaldsStyle() {
+  function applyMcDonaldsStyle() {
   // Get the active spreadsheet and sheet
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   const sheet = spreadsheet.getActiveSheet();
@@ -77,10 +79,10 @@ function onOpen() {
     rowRange.setFontColor('#000000'); // Black text
   }
 
-  // Format the Sales column with a red border
-  const salesColumnIndex = 3;
-  const salesColumnRange = sheet.getRange(1, salesColumnIndex, lastRow, 1);
-  salesColumnRange.setBorder(true, true, true, true, false, false, '#D9001B', SpreadsheetApp.BorderStyle.SOLID_THICK); // Top, left, bottom, right, no inner vertical/horizontal, red, thick
+   // Example of formatting a specific column (e.g., Sales column)
+  const salesColumnIndex = 5; // Assuming "Sales" is the 3rd column
+  const salesColumnRange = sheet.getRange(2, salesColumnIndex, lastRow - 1, 1);
+  salesColumnRange.setNumberFormat('$#,##0'); // Currency format
 
   // Auto-resize columns
   sheet.autoResizeColumns(1, lastColumn);
@@ -119,13 +121,30 @@ function applyCocaColaStyle() {
     rowRange.setFontColor('black');
   }
 
-  // Format the Sales column (assuming it's the 3rd column) with a subtle red border
-  const salesColumnIndex = 3;
-  const salesColumnRange = sheet.getRange(1, salesColumnIndex, lastRow, 1);
-  salesColumnRange.setBorder(false, false, false, true, false, false, '#CC0000', SpreadsheetApp.BorderStyle.SOLID_THIN); // Right border, thin red
+   // Example of formatting a specific column (e.g., Sales column)
+  const salesColumnIndex = 5; // Assuming "Sales" is the 3rd column
+  const salesColumnRange = sheet.getRange(2, salesColumnIndex, lastRow - 1, 1);
+  salesColumnRange.setNumberFormat('$#,##0.00'); // Currency format
 
   // Auto-resize columns
   sheet.autoResizeColumns(1, lastColumn);
 
   Logger.log('Coca-Cola style formatting applied!');
 }
+
+function removeFormatting() {
+  // Get the active spreadsheet and sheet
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getActiveSheet();
+
+  // Get the range of all cells that contain data
+  const lastRow = sheet.getLastRow();
+  const lastColumn = sheet.getLastColumn();
+  const range = sheet.getRange(1, 1, lastRow, lastColumn);
+
+  // Clear all formatting from the range
+  range.clearFormat();
+
+  Logger.log('Formatting removed from the sheet.');
+}
+
